@@ -16,10 +16,10 @@ jobs:
     - name: Build/Push
       uses: coopTilleuls/action-docker-build-push@v10
       with:
-        IMAGE_NAME: k6-runner
+        IMAGE_NAME: kubectl
         BUILD_CONTEXT: ./kubectl
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
 
 
 
