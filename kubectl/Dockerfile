@@ -5,8 +5,12 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check && \
     chmod +x kubectl && mv kubectl /usr/bin/
 
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim as debian-kubectl
 COPY --from=build /usr/bin/kubectl /usr/bin/kubectl
 ENTRYPOINT [ "kubectl" ]
 CMD [ "--help" ]
 
+FROM scratch as kubectl-mini
+COPY --from=build /usr/bin/kubectl /
+ENTRYPOINT [ "/kubectl" ]
+CMD [ "--help" ]
