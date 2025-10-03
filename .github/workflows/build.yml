@@ -20,7 +20,7 @@ jobs:
         BUILD_CONTEXT: ./kubectl
         BUILD_TARGET: kubectl-mini
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre/minimal/
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre/minimal
 
     - name: Build-kubetcl-with-shell
       uses: coopTilleuls/action-docker-build-push@v10
