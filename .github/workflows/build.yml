@@ -22,15 +22,6 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre/minimal/cronjob-cert-secrets-gc
 
-    - name: Build-cronjob-cert-gcloud
-      uses: coopTilleuls/action-docker-build-push@v12
-      with:
-        IMAGE_NAME: cronjob-cert-secrets-gc-gcloud
-        BUILD_CONTEXT: ./cronjob/cert
-        BUILD_TARGET: cronjob-gcloud
-        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre/minimal/cronjob-cert-secrets-gc
-
   build-kubectl:
     runs-on: ubuntu-latest
 
