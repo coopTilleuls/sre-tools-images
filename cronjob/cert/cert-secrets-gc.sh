@@ -15,6 +15,10 @@ if [[ "$1" == "--filter" ]]; then
     SECRET_ANNOTATION_FILTER=$2
 fi
 
+if [[ "$1" == "--dry" ]]; then
+    echo "Argument --dry is set. Will NOT be deleting anything"
+fi
+
 log_event() {
     local message="$1"
     local level="$2"
