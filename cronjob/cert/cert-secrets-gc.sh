@@ -15,6 +15,26 @@ if [[ "$1" == "--filter" ]]; then
     SECRET_ANNOTATION_FILTER=$2
 fi
 
+log_event() {
+    local message="$1"
+    local level="$2"
+    local now=$(date -u --date='now' +%Y-%m-%dT%H:%M:%SZ)
+    local secret_name="${3:-"default"}"
+    local secret_namespace="${4:-"default"}"
+    local event_name="cert-secrets-gc-$(date -u +%s%N)"
+    local host_name=$(hostname -s)
+    local template=$(cat Event.template.json)
+    template=${template//\{\{message\}\}/$message}
+    template=${template//\{\{warning-level\}\}/$level}
+    template=${template//\{\{first-timestamp\}\}/$JOBSTART}
+    template=${template//\{\{last-timestamp\}\}/$now}
+    template=${template//\{\{secret-name\}\}/$secret_name}
+    template=${template//\{\{secret-namespace\}\}/$secret_namespace}
+    template=${template//\{\{event-name\}\}/$event_name}
+    template=${template//\{\{host-name\}\}/$host_name}
+    echo "$template" | kubectl create -f -
+}
+
 # cert should have been renewed before this date
 # if it's not we delete the secret
 RENEWAL_DATE=$(date -d "@$(( $(date +%s) - 14 * 24 * 60 * 60 ))" +%s)
@@ -47,7 +67,8 @@ for CERT in $(cat /tmp/unused ) ; do
          echo "Not deleting $${NAMESPACE}}/$${SECRET}"
      else
          echo "Deleting $${NAMESPACE}}/$${SECRET}"
-         # kubectl -n $${NAMESPACE} delete secret/$${SECRET}
+         log_event "Deleting secret  $${NAMESPACE}}/$${SECRET}" "Warning" $${SECRET} $${NAMESPACE}
+         kubectl -n $${NAMESPACE} delete secret/$${SECRET}
      fi
   fi
 done

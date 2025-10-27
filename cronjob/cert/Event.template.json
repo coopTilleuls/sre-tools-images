@@ -1,0 +1,25 @@
+{
+    "apiVersion": "v1",
+    "kind": "Event",
+    "metadata": {
+        "name": "{{event-name}}",
+        "namespace": "kube-system"
+    },
+    "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Secret",
+        "name": "{{secret-name}}",
+        "namespace": "{{secret-namespace}}"
+    },
+    "reportingComponent": "cronjob-cert-secrets-gc",
+    "reportingInstance": "{{host-name}}",
+    "source": {
+        "component": "cronjob-cert-secrets-gc",
+        "host": "{{host-name}}"
+    },
+    "firstTimestamp": "{{first-timestamp}}",
+    "lastTimestamp": "{{last-timestamp}}",
+    "message": "{{message}}",
+    "reason": "UnusedSecret",
+    "type": "{{warning-level}}"
+}
