@@ -1,6 +1,6 @@
 #!/bin/bash
-# set -e
-# set -x
+set -e
+set -x
 
 if [[ "$1" == "--help" ]]; then
     echo "Usage: cert-secrets-gc.sh [option]"
