@@ -47,7 +47,7 @@ RENEWAL_DATE=$(date -d "@$(( $(date +%s) - 14 * 24 * 60 * 60 ))" +%s)
 kubectl get certificates  -A  -o json  | jq  -r ".items[] | ( .metadata.namespace + \"/\" + .spec.secretName  )" >/tmp/secrets_from_certs
 
 # secrets managed by cert manager and NOT referenced in certs
-kubectl get secrets -A -o json | jq  -r '.items[] | select( .metadata.annotations["cert-manager.io/issuer-group"] == "cert-manager.io" and .type == "kubernetes.io/tls" ) | (.metadata.namespace + "/" + .metadata.name )' | grep -x -v -f /tmp/secrets_from_certs >/tmp/abandoned
+kubectl get secrets -A -o json | jq  -r '.items[] | select( .metadata.annotations["cert-manager.io/issuer-group"] == "cert-manager.io" and .type == "kubernetes.io/tls" ) | (.metadata.namespace + "/" + .metadata.name )' | grep -x -v -f /tmp/secrets_from_certs >/tmp/abandoned  || [ $? -eq 1 ]
 
 # secrets currently used by ingress
 kubectl get ing -A -o  go-template='{{range .items}}{{$namespace := .metadata.namespace}}{{range .spec.tls }}{{$namespace}}/{{ .secretName }}{{ end }}{{printf "\n"}}{{ end}}' | sed -e '/^$/d; /<no value>/d' > /tmp/used
