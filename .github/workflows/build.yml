@@ -9,6 +9,19 @@ on:
         required: true
 
 jobs:
+  build-cronjob-cert-secrets-gc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build-cronjob-cert
+      uses: coopTilleuls/action-docker-build-push@v12
+      with:
+        IMAGE_NAME: cronjob-cert-secrets-gc
+        BUILD_CONTEXT: ./cronjob/cert
+        BUILD_TARGET: cronjob
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre/minimal
+
   build-kubectl:
     runs-on: ubuntu-latest
 
