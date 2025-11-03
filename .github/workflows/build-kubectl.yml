@@ -30,6 +30,7 @@ jobs:
          export VERSIONS=$(python ./get_kubectl_versions.py)
          echo ${VERSIONS}
          echo "kubectl_versions=${VERSIONS}" >> $GITHUB_OUTPUT   
+         cat $GITHUB_OUTPUT
 
 
   build-kubectl:
