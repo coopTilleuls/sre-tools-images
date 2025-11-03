@@ -2,7 +2,7 @@
 import os
 import json
 MIN_VERSION = 1.32
-versions = os.getenv('VERSIONS').split('\n')
+versions = os.getenv('ALL_VERSIONS').split('\n')
 ret = {}
 for v in versions:
     vsplit = v.split('.')
