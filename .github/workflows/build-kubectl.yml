@@ -34,10 +34,10 @@ jobs:
 
   build-kubectl:
    runs-on: ubuntu-latest
-   needs: ["kubectl_versions"]
+   needs: ["skopeo"]
    strategy:
      matrix:
-       version: ${{ needs.kubectl_versions.outputs.kubectl_versions }}
+       version: ${{ needs.skopeo.outputs.kubectl_versions }}
    steps:
    - name: Build-kubetcl-with-shell
      uses: coopTilleuls/action-docker-build-push@custom-tags
