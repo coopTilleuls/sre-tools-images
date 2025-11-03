@@ -25,7 +25,7 @@ jobs:
     name: kubectl_versions
     runs-on: ubuntu-latest
     outputs:
-      kubectl_versions=${{ steps.kubectl_versions.ouputs.kubectl_versions }}
+      kubectl_versions: ${{ steps.kubectl_versions.ouputs.kubectl_versions }}
     steps:
       - name: 'Set up skopeo'
         uses: warjiang/setup-skopeo@main
