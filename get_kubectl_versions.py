@@ -9,4 +9,4 @@ for v in versions:
     short_version = float(".".join([vsplit[0],vsplit[1]]).lstrip("v"))
     if  short_version >= MIN_VERSION:
         ret[vsplit[1]] = v
-print(json.dumps(ret))
+print(json.dumps(ret.values()))
