@@ -24,7 +24,7 @@ jobs:
   skopeo:
     name: kubectl_versions
     runs-on: ubuntu-latest
-    output:
+    outputs:
       kubectl_versions=${{ steps.kubectl_versions.ouputs.kubectl_versions }}
     steps:
       - name: 'Set up skopeo'
