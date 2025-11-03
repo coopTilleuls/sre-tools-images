@@ -35,17 +35,17 @@ jobs:
 
   build-kubectl:
    runs-on: ubuntu-latest
-   needs: ["skopeo"]
+   needs: ["kubectl_versions"]
    strategy:
      matrix:
-       tag: ${{ fromJSON(needs.skopeo.outputs.kubectl_versions.tags) }}
+       tag: ${{ fromJSON(needs.kubectl_versions.outputs.kubectl_versions.tags) }}
    steps:
    - name: Build-kubetcl-with-shell
      uses: coopTilleuls/action-docker-build-push@custom-tags
      with:
        IMAGE_NAME: kubectl
        BUILD_CONTEXT: ./kubectl
-       BUILD_ARGS:  ${{needs.skopeo.outputs.kubectl_versions.versions[matrix.tag] }}
+       BUILD_ARGS:  ${{needs.kubectl_versions.outputs.kubectl_versions.versions[matrix.tag] }}
        BUILD_TARGET: debian-kubectl
        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
