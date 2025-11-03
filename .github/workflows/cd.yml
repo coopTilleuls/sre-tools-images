@@ -20,15 +20,25 @@ jobs:
           labels: |
             deploy
 
-  build:
-    name: Build
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
-    uses: ./.github/workflows/build.yml
-    with:
-      tags: |
-        type=ref,event=branch
-        type=ref,event=pr
-        type=ref,event=tag
-        type=semver,pattern={{version}}
-        type=semver,pattern={{major}}.{{minor}}
-        type=sha
+
+     - name: 'Set up skopeo'
+       uses: warjiang/setup-skopeo@main
+       with:
+         version: latest
+
+     - name: 'Sync images'
+       run: |
+         skopeo --version
+         skopeo  list-tags   docker://registry.k8s.io/kubectl
+  #build:
+  #  name: Build
+  #  if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+  #  uses: ./.github/workflows/build.yml
+  #  with:
+  #    tags: |
+  #      type=ref,event=branch
+  #      type=ref,event=pr
+  #      type=ref,event=tag
+  #      type=semver,pattern={{version}}
+  #      type=semver,pattern={{major}}.{{minor}}
+  #      type=sha
