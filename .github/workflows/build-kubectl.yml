@@ -38,7 +38,7 @@ jobs:
    needs: ["skopeo"]
    strategy:
      matrix:
-       tag: ${{ needs.skopeo.outputs.kubectl_versions.tags }}
+       tag: ${{ fromJSON(needs.skopeo.outputs.kubectl_versions.tags) }}
    steps:
    - name: Build-kubetcl-with-shell
      uses: coopTilleuls/action-docker-build-push@custom-tags
