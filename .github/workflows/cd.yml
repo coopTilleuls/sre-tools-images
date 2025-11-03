@@ -21,21 +21,27 @@ jobs:
           labels: |
             deploy
 
-
   skopeo:
-    name: get kubectl versions
+    name: kubectl_versions
     runs-on: ubuntu-latest
+    output:
+      kubectl_versions=${{ steps.kubectl_versions.ouputs.kubectl_versions }}
     steps:
       - name: 'Set up skopeo'
         uses: warjiang/setup-skopeo@main
         with:
           version: latest
 
-      - name: 'Sync images'
+      - name: 'versions'
+        id: kubectl_versions
         run: |
-          skopeo --version
-          skopeo  list-tags   docker://registry.k8s.io/kubectl | jq -r '.Tags | .[]|  select(. | match("v[0-9].[0-9]{2}.[0-9]$"))'
-  #build:
+         VERSION=$(skopeo  list-tags   docker://registry.k8s.io/kubectl | jq -r '.Tags | .[]|  select(. | match("v[0-9].[0-9]{2}.[0-9]$"))' | \
+            | sort | awk -F"."  '$2>31{split($0,a,"."); ret[a[2]] = $0" "  }END{for (i=0 ; i<length(ret); i++sd ) { printf ret[i] }}' )
+         echo "kubectl_versions=${VERSIONS} >> $GITHUB_OUTPUT   
+         python --version
+
+
+#build:
   #  name: Build
   #  if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
   #  uses: ./.github/workflows/build.yml
