@@ -7,8 +7,11 @@ ret = {}
 ret2 = []
 for v in versions:
     vsplit = v.split('.')
-    short_version = float(".".join([vsplit[0],vsplit[1]]).lstrip("v"))
-    if  short_version >= MIN_VERSION:
-        ret[vsplit[1]] = v
-        ret2.append(v)
-print(json.dumps(ret2))
+    tag = float(".".join([vsplit[0],vsplit[1]]).lstrip("v"))
+    if  tag >= MIN_VERSION:
+        ret[tag] = v
+print(json.dumps({ 
+                  "tags" : [ str(t) for t in list(ret.keys())  ],
+              "versions": ret
+      }))
+    
