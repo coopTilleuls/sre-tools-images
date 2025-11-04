@@ -40,24 +40,23 @@ jobs:
       - name: data
         id: data
         run: |
-          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
-          echo $KUBECTL_VERSION
+          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
-          cat  $GITHUB_OUTPUT
+          echo "tags=$KUBECTL_VERSION,${{matrix.tag}}" >> "$GITHUB_OUTPUT"
       - name: debug
         run: | 
           echo ${{ steps.data.outputs.build_args }}
 
-      #- name: Build-kubetcl-with-shell
-      #  uses: coopTilleuls/action-docker-build-push@custom-tags
-      #  with:
-      #    IMAGE_NAME: kubectl
-      #    BUILD_CONTEXT: ./kubectl
-      #    BUILD_ARGS: ${{ steps.data.build_args }}
-      #    BUILD_TARGET: debian-kubectl
-      #    REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-      #    IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
-      #    CUSTOM_TAG: ${{ matrix.tag }}
+      - name: Build-kubetcl-with-shell
+        uses: coopTilleuls/action-docker-build-push@custom-tags
+        with:
+          IMAGE_NAME: kubectl
+          BUILD_CONTEXT: ./kubectl
+          BUILD_ARGS: ${{ steps.data.build_args }}
+          BUILD_TARGET: debian-kubectl
+          REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
+          CUSTOM_TAG: ${{ steps.data.tags }}
 
 
 
