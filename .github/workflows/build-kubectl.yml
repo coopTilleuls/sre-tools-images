@@ -37,14 +37,14 @@ jobs:
    needs: ["fetch-data"]
    strategy:
      matrix:
-       tag: ${{ fromJSON(needs.fetch-data.outputs.kubectl_versions) | jq 'keys' }}
+       tag: ${{ fromJSON(needs.fetch-data.outputs.kubectl_versions) | keys | join(',') }}
    steps:
    - name: Build-kubetcl-with-shell
      uses: coopTilleuls/action-docker-build-push@custom-tags
      with:
        IMAGE_NAME: kubectl
        BUILD_CONTEXT: ./kubectl
-       BUILD_ARGS:  ${ echo '${{needs.skpeo.outputs.kubectl_versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]' }
+       BUILD_ARGS:  ${ echo '${{needs.fetch-data.outputs.kubectl_versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]' }
        BUILD_TARGET: debian-kubectl
        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
        IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
