@@ -39,7 +39,7 @@ jobs:
         run: echo "$OUTPUT1 $OUTPUT2 ${{matrix.tag}}"
       - name: data
         run: |
-          echo '${{needs.fetch-data.outputs.kubectl_versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]' 
+          echo '${{needs.fetch-data.outputs.versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]' 
  
 #  fetchdata:
 #    runs-on: ubuntu-latest
