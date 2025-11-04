@@ -23,7 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: job1
     steps:
-      - run: echo "${{needs.job1.outputs.output1}}"
+      - run: |
+        echo "${{needs.job1.outputs.output1}}"
  "
 #  fetchdata:
 #    runs-on: ubuntu-latest
