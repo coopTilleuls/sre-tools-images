@@ -47,7 +47,7 @@ jobs:
         with:
           IMAGE_NAME: kubectl
           BUILD_CONTEXT: ./kubectl
-          BUILD_ARGS: ${{ step.data.build_args }}
+          BUILD_ARGS: ${{ steps.data.build_args }}
           BUILD_TARGET: debian-kubectl
           REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
