@@ -43,6 +43,10 @@ jobs:
           echo $KUBECTL_VERSION
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
           cat  $GITHUB_OUTPUT
+      - name: debug
+        run: | 
+          echo ${{ steps.data.build_args }}
+
       #- name: Build-kubetcl-with-shell
       #  uses: coopTilleuls/action-docker-build-push@custom-tags
       #  with:
