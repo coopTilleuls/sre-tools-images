@@ -37,6 +37,10 @@ jobs:
     steps:
       - name: test
         run: echo "$OUTPUT1 $OUTPUT2 ${{matrix.tag}}"
+    steps:
+      - name: data
+        run: |
+          echo '${{needs.fetch-data.outputs.kubectl_versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]' 
  
 #  fetchdata:
 #    runs-on: ubuntu-latest
