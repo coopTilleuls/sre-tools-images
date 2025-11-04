@@ -40,7 +40,7 @@ jobs:
       - name: data
         run: |
           KUBECTL_VERSION=$('${{needs.fetch-data.outputs.versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
-          echo "kubectl_version=$KUBECTL_VERSION" >> "$GITHUB_ENV"
+          echo "kubectl_version=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
       - name: Build-kubetcl-with-shell
         uses: coopTilleuls/action-docker-build-push@custom-tags
         with:
