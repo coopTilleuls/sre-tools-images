@@ -13,7 +13,6 @@ jobs:
     name: kubectl_versions
     runs-on: ubuntu-latest
     outputs:
-      tags: ${{ steps.data.ouputs.tags }}
       kubectl_versions: ${{ steps.data.ouputs.kubectl_versions }}
     steps:
       - name: Checkout
@@ -36,14 +35,14 @@ jobs:
     steps:
       - name: Access JSON output
         run: |
-          echo "Le JSON reçu est: ${{  needs.fetch-data.outputs.tags}}"
+          echo "Le JSON reçu est: ${{  needs.fetch-data.outputs.kubectl_versions}}"
 
   build-kubectl:
     runs-on: ubuntu-latest
     needs: fetch-data
     strategy:
       matrix:
-        tag: ${{ fromJSON(needs.fetch-data.outputs.tags) }}
+        tag: ${{ fromJSON(needs.fetch-data.outputs.kubectl_versions) }}
     steps:
     - name: Build-kubetcl-with-shell
       uses: coopTilleuls/action-docker-build-push@custom-tags
