@@ -41,7 +41,7 @@ jobs:
 
   build-kubectl:
     runs-on: ubuntu-latest
-    needs: fetch-data
+    needs: fetchdata
     strategy:
       matrix:
         tag: ${{ fromJSON(needs.fetchdata.outputs.versions) }}
