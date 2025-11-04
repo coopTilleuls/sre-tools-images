@@ -38,6 +38,7 @@ jobs:
       - name: test
         run: echo "$OUTPUT1 $OUTPUT2 ${{matrix.tag}}"
       - name: data
+        id: data
         run: |
           KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
           echo $KUBECTL_VERSION
