@@ -45,7 +45,7 @@ jobs:
           cat  $GITHUB_OUTPUT
       - name: debug
         run: | 
-          echo ${{ steps.data.build_args }}
+          echo ${{ steps.data.outputs.build_args }}
 
       #- name: Build-kubetcl-with-shell
       #  uses: coopTilleuls/action-docker-build-push@custom-tags
