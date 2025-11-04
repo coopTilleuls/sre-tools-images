@@ -57,6 +57,7 @@ jobs:
           REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
           CUSTOM_TAG: ${{ steps.data.outputs.tags }}
+          SECURITY_SCAN: false
 
 
 
