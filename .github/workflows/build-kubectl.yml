@@ -28,8 +28,8 @@ jobs:
          python --version
          export ALL_VERSIONS=$(skopeo  list-tags   docker://registry.k8s.io/kubectl | jq -r '.Tags | .[]|  select(. | match("v[0-9].[0-9]{2}.[0-9]$"))')
          python ./get_kubectl_versions.py > data.json
-         echo "kubectl_versions=\'$(cat data.json | jq -c )\'" >> $GITHUB_OUTPUT   
-         echo "tags=\'$(cat data.json | jq -c 'keys')\'" >> $GITHUB_OUTPUT   
+         echo "kubectl_versions='$(cat data.json | jq -c )'" >> $GITHUB_OUTPUT   
+         echo "tags='$(cat data.json | jq -c 'keys')'" >> $GITHUB_OUTPUT   
          cat $GITHUB_OUTPUT
 
 
