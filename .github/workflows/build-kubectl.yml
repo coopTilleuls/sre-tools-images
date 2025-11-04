@@ -13,6 +13,7 @@ jobs:
     name: kubectl_versions
     runs-on: ubuntu-latest
     outputs:
+      tags: ${{ steps.kubectl_versions.ouputs.tags }}
       kubectl_versions: ${{ steps.kubectl_versions.ouputs.kubectl_versions }}
     steps:
       - name: Checkout
@@ -29,7 +30,7 @@ jobs:
          export ALL_VERSIONS=$(skopeo  list-tags   docker://registry.k8s.io/kubectl | jq -r '.Tags | .[]|  select(. | match("v[0-9].[0-9]{2}.[0-9]$"))')
          python ./get_kubectl_versions.py) > data.json
          echo "kubectl_versions=${cat data.json}" >> $GITHUB_OUTPUT   
-         cat $GITHUB_OUTPUT
+         echo "tags=${cat data.json | jq 'keys'}" >> $GITHUB_OUTPUT   
 
 
   build-kubectl:
@@ -37,7 +38,7 @@ jobs:
    needs: ["fetch-data"]
    strategy:
      matrix:
-       tag: ${{ fromJSON(needs.fetch-data.outputs.kubectl_versions) | keys | join(',') }}
+       tag: ${{ fromJSON(needs.fetch-data.outputs.tags) }}
    steps:
    - name: Build-kubetcl-with-shell
      uses: coopTilleuls/action-docker-build-push@custom-tags
