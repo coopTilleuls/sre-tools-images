@@ -42,7 +42,7 @@ jobs:
         run: |
           KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
           echo $KUBECTL_VERSION
-          echo "build_args=KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
+          echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
           cat  $GITHUB_OUTPUT
       - name: debug
         run: | 
