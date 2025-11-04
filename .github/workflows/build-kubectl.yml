@@ -37,7 +37,7 @@ jobs:
     needs: fetch-data
     strategy:
       matrix:
-        tag: ${{ fromJSON(needs.fetch-data.outputs.versions) }}
+        tag: ${{ fromJSON(needs.fetch-data.outputs.versions) | keys  }}
     steps:
       - env:
           OUTPUT1: ${{needs.fetch-data.outputs.output1}}
