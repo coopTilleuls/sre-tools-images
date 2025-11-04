@@ -9,8 +9,8 @@ on:
         required: true
 
 jobs:
-  job1:
-    fetchdata: ubuntu-latest
+  fetchdata:
+    run-on: ubuntu-latest
     outputs:
       output1: ${{ steps.step1.outputs.test }}
       versions: ${{ steps.data.outputs.versions }}
