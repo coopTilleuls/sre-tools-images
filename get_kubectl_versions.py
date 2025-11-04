@@ -10,8 +10,5 @@ for v in versions:
     tag = float(".".join([vsplit[0],vsplit[1]]).lstrip("v"))
     if  tag >= MIN_VERSION:
         ret[tag] = v
-print(json.dumps({ 
-                  "tags" : [ str(t) for t in list(ret.keys())  ],
-              "versions": ret
-      }))
+print(json.dumps(ret))
     
