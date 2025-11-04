@@ -33,7 +33,7 @@ jobs:
     needs: fetch-data
     strategy:
       matrix:
-        tag: $(echo ${{ fromJSON(needs.fetch-data.outputs.tags) }} )
+        tag: ${{ fromJSON(needs.fetch-data.outputs.tags) }}
     steps:
       - name: test
         run: echo "$OUTPUT1 $OUTPUT2 ${{matrix.tag}}"
