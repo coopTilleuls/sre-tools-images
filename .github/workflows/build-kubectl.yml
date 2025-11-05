@@ -40,12 +40,9 @@ jobs:
       - name: data
         id: data
         run: |
-          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]') 
+          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]')
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
           echo "tags=$KUBECTL_VERSION,${{matrix.tag}}" >> "$GITHUB_OUTPUT"
-      - name: debug
-        run: | 
-          echo ${{ steps.data.outputs.build_args }}
 
       - name: Build-kubetcl-with-shell
         uses: coopTilleuls/action-docker-build-push@custom-tags
