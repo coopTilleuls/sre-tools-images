@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: fetch-data
     strategy:
+      fail-fast: false
       matrix:
         tag: ${{ fromJSON(needs.fetch-data.outputs.tags) }}
     steps:
