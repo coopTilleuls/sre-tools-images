@@ -32,10 +32,12 @@ jobs:
          python ./get_kubectl_versions.py >  data.json
          echo "versions=$(cat data.json )" >> "$GITHUB_OUTPUT"
          echo "tags=$(cat data.json | jq -c 'keys')"  >> "$GITHUB_OUTPUT"
+         cat "$GITHUB_OUTPUT"
+
   build-kubectl:
     runs-on: ubuntu-latest
     needs: fetch-data
-    if: toJSON(needs.fetch-data.outputs.tags) != '{}'
+    if: needs.fetch-data.outputs.tags != '{}'
     strategy:
       fail-fast: false
       matrix:
