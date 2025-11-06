@@ -7,6 +7,9 @@ on:
         type: string
         description: The Docker Tags (see docker/metadata-action@v4 for available values)
         required: true
+env:
+  BASE_IMAGE="ghcr.io/cooptilleuls/sre/kubectl"
+  IMAGE_REPOSITORY=ghcr.io/cooptilleuls/sre
 
 jobs:
   fetch-data:
@@ -41,10 +44,20 @@ jobs:
       - name: data
         id: data
         run: |
-          BASE_IMAGE="ghcr.io/cooptilleuls/sre/kubectl"
           KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]')
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
-          echo "tags=${BASE_IMAGE}:${KUBECTL_VERSION},${BASE_IMAGE}${{matrix.tag}}" >> "$GITHUB_OUTPUT"
+          echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{BASE_IMAGE}}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.11.1
+
+      - name: Login to registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.IMAGE_REPOSITORY }}
+          username: _json_key
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build image and push to registry
         uses: docker/build-push-action@v6
@@ -61,9 +74,3 @@ jobs:
             type=gha
           cache-to: |
             type=gha,mode=max
-
-
-
-
-
-
