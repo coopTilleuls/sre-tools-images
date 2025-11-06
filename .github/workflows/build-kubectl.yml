@@ -63,18 +63,18 @@ jobs:
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
           echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{ env.BASE_IMAGE }}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
 
-      #- name: Build image and push to registry
-      #  uses: docker/build-push-action@v6
-      #  id: docker_build_push
-      #  env:
-      #    DOCKER_BUILD_SUMMARY: true
-      #  with:
-      #    context: ./kubectl
-      #    tags: ${{ steps.data.outputs.tags }}
-      #    build-args: ${{ steps.data.outputs.build_args }}
-      #    target: debian-kubectl
-      #    push: true
-      #    cache-from: |
-      #      type=gha
-      #    cache-to: |
-      #      type=gha,mode=max
+      - name: Build image and push to registry
+        uses: docker/build-push-action@v6
+        id: docker_build_push
+        env:
+          DOCKER_BUILD_SUMMARY: true
+        with:
+          context: ./kubectl
+          tags: ${{ steps.data.outputs.tags }}
+          build-args: ${{ steps.data.outputs.build_args }}
+          target: debian-kubectl
+          push: true
+          cache-from: |
+            type=gha
+          cache-to: |
+            type=gha,mode=max
