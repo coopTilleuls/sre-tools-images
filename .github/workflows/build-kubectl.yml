@@ -46,7 +46,7 @@ jobs:
         run: |
           KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]')
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
-          echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{BASE_IMAGE}}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
+          echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{ env.BASE_IMAGE }}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
         id: buildx
