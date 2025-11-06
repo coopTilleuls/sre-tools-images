@@ -31,6 +31,8 @@ jobs:
          python ./get_kubectl_versions.py >  data.json
          echo "versions=$(cat data.json )" >> "$GITHUB_OUTPUT"
          echo "tags=$(cat data.json | jq -c 'keys')"  >> "$GITHUB_OUTPUT"
+         export OUR_CURRENT_TAGS=$(skopeo  list-tags   docker://${{ env.BASE_IMAGE }}| jq -r '.Tags | .[]|  select(. | match("v[0-9].[0-9]{2}.[0-9]$"))')
+         echo $OUR_CURRENT_TAGS
   build-kubectl:
     runs-on: ubuntu-latest
     needs: fetch-data
@@ -41,13 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: data
-        id: data
-        run: |
-          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]')
-          echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
-          echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{ env.BASE_IMAGE }}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
-
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3.11.1
@@ -59,18 +54,25 @@ jobs:
           username: _json_key
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image and push to registry
-        uses: docker/build-push-action@v6
-        id: docker_build_push
-        env:
-          DOCKER_BUILD_SUMMARY: true
-        with:
-          context: ./kubectl
-          tags: ${{ steps.data.outputs.tags }}
-          build-args: ${{ steps.data.outputs.build_args }}
-          target: debian-kubectl
-          push: true
-          cache-from: |
-            type=gha
-          cache-to: |
-            type=gha,mode=max
+      - name: data
+        id: data
+        run: |
+          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY]')
+          echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
+          echo "tags=${{ env.BASE_IMAGE }}:${KUBECTL_VERSION},${{ env.BASE_IMAGE }}:${{matrix.tag}}" >> "$GITHUB_OUTPUT"
+
+      #- name: Build image and push to registry
+      #  uses: docker/build-push-action@v6
+      #  id: docker_build_push
+      #  env:
+      #    DOCKER_BUILD_SUMMARY: true
+      #  with:
+      #    context: ./kubectl
+      #    tags: ${{ steps.data.outputs.tags }}
+      #    build-args: ${{ steps.data.outputs.build_args }}
+      #    target: debian-kubectl
+      #    push: true
+      #    cache-from: |
+      #      type=gha
+      #    cache-to: |
+      #      type=gha,mode=max
