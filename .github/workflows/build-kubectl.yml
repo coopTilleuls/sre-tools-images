@@ -8,8 +8,8 @@ on:
         description: The Docker Tags (see docker/metadata-action@v4 for available values)
         required: true
 env:
-  BASE_IMAGE="ghcr.io/cooptilleuls/sre/kubectl"
-  IMAGE_REPOSITORY=ghcr.io/cooptilleuls/sre
+  IMAGE_REPOSITORY: ghcr.io/cooptilleuls/sre
+  BASE_IMAGE: ghcr.io/cooptilleuls/sre/kubectl
 
 jobs:
   fetch-data:
