@@ -39,8 +39,8 @@ jobs:
       matrix:
         tag: ${{ fromJSON(needs.fetch-data.outputs.tags) }}
     steps:
-      - name: test
-        run: echo "$OUTPUT1 $OUTPUT2 ${{matrix.tag}}"
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: data
         id: data
         run: |
