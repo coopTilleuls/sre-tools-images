@@ -58,10 +58,9 @@ jobs:
           target: debian-kubectl
           push: true
           cache-from: |
-            type=gha,scope=${{github.ref}}
-            type=gha,scope=refs/heads/main
+            type=gha
           cache-to: |
-            type=gha,scope=${{github.ref}},mode=max
+            type=gha,mode=max
 
 
 
