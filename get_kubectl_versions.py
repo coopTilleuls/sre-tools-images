@@ -14,6 +14,6 @@ for v in versions:
         ret[tag] = {'base': v, 'image_tags': image_tags }
 
 # do not rebuild exiting image tag
-todo = {k:v for k,v in ret.items()  } #if not v['base'] in our_current_tags}
+todo = {k:v for k,v in ret.items()  if not v['base'] in our_current_tags}
 print(json.dumps(todo))
 
