@@ -58,9 +58,9 @@ jobs:
       - name: data
         id: data
         run: |
-          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY].base')
+          KUBECTL_VERSION=$(echo '${{needs.fetch-data.outputs.tags }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY].base')
           echo "build_args=KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_OUTPUT"
-          IMAGE_TAGS=$(echo '${{needs.fetch-data.outputs.versions }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY].image_tags')
+          IMAGE_TAGS=$(echo '${{needs.fetch-data.outputs.tags }}' | jq -r --arg KEY "${{ matrix.tag }}" '.[$KEY].image_tags')
           echo "tags=${IMAGE_TAGS}" >> "$GITHUB_OUTPUT"
 
       - name: Build image and push to registry
