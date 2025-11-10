@@ -11,7 +11,7 @@ for v in versions:
     tag = float(".".join([vsplit[0],vsplit[1]]).lstrip("v"))
     if  tag >= MIN_VERSION:
         image_tags =  ",".join([ ":".join([base_image, str(t)])  for t in [ v , v.strip('v'), tag]])
-        ret[tag] = {'base': v , 'image_tags': image_tags }
+        ret[tag] = {'base': v.strip('v'), 'image_tags': image_tags }
 
 # do not rebuild exiting image tag
 todo = {k:v for k,v in ret.items() if not v['base'] in our_current_tags}
