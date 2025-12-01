@@ -1,9 +1,11 @@
 FROM debian:bookworm-slim AS build
-RUN apt-get update -y  && apt-get upgrade -y  && apt-get install curl -y
+RUN apt-get update -y  && apt-get upgrade -y  && apt-get install curl unzip -y
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"  && \
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" && \
     echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check && \
     chmod +x kubectl && mv kubectl /usr/bin/
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip -d /tmp
 
 FROM debian:bookworm-slim AS cronjob
 COPY --from=build /usr/bin/kubectl /usr/bin/kubectl
@@ -22,3 +24,9 @@ RUN apt-get update -y  && apt-get upgrade -y  && apt-get install python3 -y
 COPY --from=cloud-sdk-base /usr/lib/google-cloud-sdk /usr/lib/google-cloud-sdk
 ENV CLOUDSDK_ROOT_DIR="/usr/lib/google-cloud-sdk"
 ENV PATH="${CLOUDSDK_ROOT_DIR}/bin:${PATH}"
+
+# Fat image includes aws
+FROM cronjob AS cronjob-aws
+COPY --from=build /tmp/aws /tmp/aws
+RUN /tmp/aws/install && \
+    rm -rf /tmp/aws
